@@ -10,3 +10,9 @@ tls:
       defaultCertificate:
         certFile: "/etc/traefik/certs/fullchain.pem"
         keyFile: "/etc/traefik/certs/privkey.pem"
+
+http:
+  middlewares:
+    traefik-auth:
+      basicAuth:
+        usersFile: "/etc/traefik/traefik-auth.txt"
