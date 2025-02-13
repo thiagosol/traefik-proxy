@@ -1,5 +1,7 @@
 FROM traefik:v2.0
 
+ARG TRAEFIK_AUTH
+
 LABEL traefik.http.middlewares.traefik-auth.basicauth.users="${TRAEFIK_AUTH}"
 
 COPY traefik.yml /traefik.yml
