@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  traefik-proxy:
+    image: traefik-proxy
+    pull_policy: never
+    container_name: traefik-proxy
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    command:
+      - --api.insecure=true
+      - --providers.docker
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /opt/auto-deploy/certs/https:/etc/traefik/certs
+    deploy:
+      resources:
+        limits:
+          memory: 150M
+
+networks:
+  default:
+    external:
+      name: external-sol-apis
