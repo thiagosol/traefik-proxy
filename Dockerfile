@@ -6,12 +6,10 @@ ARG TRAEFIK_USER
 ARG TRAEFIK_PASS
 
 RUN echo "$(htpasswd -nbB ${TRAEFIK_USER} ${TRAEFIK_PASS} | sed 's/\$/\$\$/g')" > /auth.txt
-
 ARG TRAEFIK_AUTH
-RUN export TRAEFIK_AUTH=$(cat /auth.txt) && \
-    echo "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_AUTH}" > /labels.env
+RUN TRAEFIK_AUTH=$(cat /auth.txt)
 
-LABEL traefik.http.middlewares.traefik-auth.basicauth.users-file="/labels.env"
+LABEL traefik.http.middlewares.traefik-auth.basicauth.users="${TRAEFIK_AUTH}"
 
 COPY traefik.yml /traefik.yml
 COPY dynamic-conf.yml /etc/traefik/dynamic-conf.yml
