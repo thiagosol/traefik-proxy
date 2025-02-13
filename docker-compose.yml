@@ -18,6 +18,19 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /opt/auto-deploy/certs/https:/etc/traefik/certs
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.thiagosol.com`)"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`traefik.thiagosol.com`)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=thiagosol.com"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=traefik.thiagosol.com"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
     deploy:
       resources:
         limits:
