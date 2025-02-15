@@ -31,12 +31,17 @@ services:
       - "traefik.http.routers.traefik-secure.tls.domains[0].main=thiagosol.com"
       - "traefik.http.routers.traefik-secure.tls.domains[0].sans=traefik.thiagosol.com"
       - "traefik.http.routers.traefik-secure.service=api@internal"
+      - "traefik.docker.network=external-sol-apis"
+    networks:
+      - external-sol-apis
+      - logging-network
     deploy:
       resources:
         limits:
           memory: 150M
 
 networks:
-  default:
-    external:
-      name: external-sol-apis
+  logging-network:
+    external: true
+  external-sol-apis:
+    external: true
